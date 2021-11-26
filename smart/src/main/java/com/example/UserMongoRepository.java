@@ -6,4 +6,5 @@ public interface UserMongoRepository extends MongoRepository<User, String> {
 
     User findFirstByEmail(String email);
 
+
 }

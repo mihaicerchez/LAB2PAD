@@ -2,18 +2,36 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Post Request </title>
+    <title>Post/Put Request </title>
 </head>
 <body>
+<h3>PUT</h3>
+<form th:method="PUT" th:action="@{/users}" th:object="${user}">
+    <label for="id">Enter id: </label>
+    <input id="id" th:field="*{id}" type="text"/>
+    <br/>
+    <label for="name_put">Enter name*: </label>
+    <input id="name_put" th:field="*{name}" type="text"/>
+    <br/>
+    <label for="age_put">Enter age*: </label>
+    <input id="age_put" th:field="*{age}" type="text"/>
+    <br/>
+    <label for="mail_put">Enter email*: </label>
+    <input id="mail_put" th:field="*{email}" type="text"/>
+    <br/>
+    <input type="submit" value="Update!"/>
+</form>
+<bt/>
+<h3>POST</h3>
 <form th:method="POST" th:action="@{/users}" th:object="${user}">
-    <label for="name">Enter name: </label>
-    <input id="name" th:field="*{name}" type="text"/>
+    <label for="name_post">Enter name*: </label>
+    <input id="name_post" th:field="*{name}" type="text"/>
     <br/>
-    <label for="age">Enter age: </label>
-    <input id="age" th:field="*{age}" type="text"/>
+    <label for="age_post">Enter age*: </label>
+    <input id="age_post" th:field="*{age}" type="text"/>
     <br/>
-    <label for="mail">Enter email: </label>
-    <input id="mail" th:field="*{email}" type="text"/>
+    <label for="mail_post">Enter email*: </label>
+    <input id="mail_post" th:field="*{email}" type="text"/>
     <br/>
     <input type="submit" value="Create!"/>
 </form>

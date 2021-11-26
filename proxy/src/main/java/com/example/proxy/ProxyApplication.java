@@ -33,27 +33,31 @@ public class ProxyApplication {
 	}
 
 
+
 	@Bean
 	RouteLocator gateway1(RouteLocatorBuilder rlb ){
-		System.out.println("-----------");
+
 			return rlb
 					.routes()
 					.route(routeSpec -> routeSpec.weight("group1",5).and()
-							.path("/users").and()
-							.method(HttpMethod.GET)
+							.path("/users")
 								.uri("http://localhost:9001/")
 					)
 					.route(routeSpec -> routeSpec.weight("group1",5).and()
-							.path("/post")
-							.uri("http://localhost:9001/"))
-					.route(routeSpec -> routeSpec.weight("group2",5).and()
-							.path("/users").and().method(HttpMethod.GET)
+							.path("/users")
 							.uri("http://localhost:9002/")
 					)
 					.route(routeSpec -> routeSpec.weight("group2",5).and()
-							.path("/post")
-							.uri("http://localhost:9002/"))
-
+							.path("/postput")
+							.uri("http://localhost:9001/")
+					)
+					.route(routeSpec -> routeSpec.weight("group2",5).and()
+							.path("/postput")
+							.uri("http://localhost:9002/")
+					)
 					.build();
 		}
+
+
+
 }

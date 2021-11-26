@@ -30,7 +30,7 @@ public class SmartController {
         return service.getAll();
     }
 
-    @GetMapping("/post")
+    @GetMapping("/postput")
     public String addUser(Model model) {
         model.addAttribute("user", new User());
         return "adduser";
@@ -46,7 +46,9 @@ public class SmartController {
         String body = objectMapper.writeValueAsString(entity);
         System.out.println("\n\n\n"+body);
         syncService.syncSendEntity(entity);
+        Thread.sleep(10000);
         return "redirect:/users";
+
     }
     @PostMapping(value = "/sync", consumes = "application/json", produces = "application/json")
     @ResponseBody
