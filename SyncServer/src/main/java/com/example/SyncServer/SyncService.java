@@ -19,51 +19,48 @@ public class SyncService {
 
     private ArrayList<Entity> entitys = new ArrayList<Entity>();
 
-    public void addUser(Entity entity){
+    private ArrayList<String> hosts = new ArrayList<String>();
+
+    public void addUser(Entity entity) {
         entitys.add(entity);
     }
 
-    public void work(Entity entity) throws URISyntaxException, IOException, InterruptedException {
-        if (!entitys.contains(entity))
-        {
-            addUser(entity);
-            toSync(entity);
+    public void addHost(String host) {
+        if (!hosts.contains(host)){
+            hosts.add(host);
         }
         else
         {
+            System.out.println("Host is already exists");
+        }
+    }
+
+    public void work(Entity entity) throws URISyntaxException, IOException, InterruptedException {
+        if (!entitys.contains(entity)) {
+            addUser(entity);
+            toSync(entity);
+        } else {
             System.out.println("FAILED");
         }
     }
+
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public CompletableFuture<HttpResponse<String>> toSync(Entity entity) throws URISyntaxException, IOException, InterruptedException {
+    public void toSync(Entity entity) throws URISyntaxException, IOException, InterruptedException {
         String body = objectMapper.writeValueAsString(entity.getUser());
-        if (entity.getSource().equals("localhost:9001"))
-        {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:9002/sync"))
-                    .POST(HttpRequest.BodyPublishers.ofString(body))
-                    .headers("Content-Type", "application/json")
-                    .build();
-            CompletableFuture<HttpResponse<String>> response = client
-                    .sendAsync(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response);
-            System.out.println("Send to 9002");
-            return response;
-        }
-        else {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:9001/sync"))
-                    .POST(HttpRequest.BodyPublishers.ofString(body))
-                    .headers("Content-Type", "application/json")
-                    .build();
-            CompletableFuture<HttpResponse<String>> response = client
-                    .sendAsync(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Send to 9001");
-            System.out.println(response);
-            return response;
+        for (String i : hosts) {
+            System.out.println("Sending to host"+ i);
+            if (!i.equals(entity.getSource())) {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(new URI("http://" + i + "/sync"))
+                        .POST(HttpRequest.BodyPublishers.ofString(body))
+                        .headers("Content-Type", "application/json")
+                        .build();
+                CompletableFuture<HttpResponse<String>> response = client
+                        .sendAsync(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println(response);
+                System.out.println("Send to "+i);
+            }
         }
     }
-
-
 }

@@ -25,7 +25,16 @@ public class SyncController {
         System.out.println("New entity has been added to syncro");
         System.out.println("Source: "+entity.getSource());
         System.out.println("ID: "+entity.getUser().getId());
+        syncService.addHost(entity.getSource());
         syncService.work(entity);
         return entity.getSource();
+    }
+
+    @PostMapping(value = "/subscribe", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public String addNewUser(@RequestBody String addr) throws IOException, URISyntaxException, InterruptedException {
+        System.out.println("New subscriber has been added:" + addr);
+        syncService.addHost(addr);
+        return addr;
     }
 }
