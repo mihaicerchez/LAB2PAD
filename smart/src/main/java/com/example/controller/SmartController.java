@@ -46,7 +46,7 @@ public class SmartController {
         String body = objectMapper.writeValueAsString(entity);
         System.out.println("\n\n\n"+body);
         syncService.syncSendEntity(entity);
-        Thread.sleep(10000);
+        //Thread.sleep(10000);
         return "redirect:/users";
 
     }
